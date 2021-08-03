@@ -1,4 +1,5 @@
 const express = require('express');
+const exphbs = require('express-handlebars')
 const router = express.Router();
 const port = process.env.PORT || 8080;
 
@@ -20,6 +21,8 @@ app.use(express.urlencoded({
 }));
 
 app.use('/api', router);
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
 
 const server = app.listen(port, () => {
     console.log('Server listening at port: ' + port);
@@ -30,17 +33,14 @@ server.on('error', err => {
 });
 
 app.get('/productos', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html')
+  res.render('form')
 });
 
 router.get('/productos/listar', async (req, res) => {
     const dalProductos = new DALProductos('items.js')
     const products = await dalProductos.read();
 
-    if (products.length == 0)
-        res.status(404).json({error: 'Products not found'});
-    else 
-        res.status(200).json(products);
+    res.render('productos', {products: products})
 });
 
 router.get('/productos/listar/:id', async (req, res) => {
@@ -51,7 +51,7 @@ router.get('/productos/listar/:id', async (req, res) => {
     if (product.length == 0)
         res.status(404).json({error: "Product not found"});
     else 
-        res.status(200).json(product);
+        res.render('producto', {product: product})
 });
 
 router.post('/productos/guardar', async (req, res) => {
