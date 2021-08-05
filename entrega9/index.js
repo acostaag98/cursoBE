@@ -17,11 +17,18 @@ const app = express();
 app.use(allowCrossDomain)
 app.use(express.json());
 app.use(express.urlencoded({
-  extended: false
+  extended: true
 }));
 
 app.use('/api', router);
-app.engine('handlebars', exphbs());
+app.engine(
+  "handlebars",
+  exphbs({
+    extname: "handlebars",
+    defaultLayout: '',
+    layoutsDir: __dirname + "/views"
+  })
+);
 app.set('view engine', 'handlebars');
 
 const server = app.listen(port, () => {
