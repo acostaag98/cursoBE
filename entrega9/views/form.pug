@@ -1,0 +1,20 @@
+html 
+    head
+        title Documento
+    body
+        if products
+            main
+                .container
+                    .table.table
+                    tr
+                        th ID 
+                        th Name 
+                        th Price 
+                        th Thumbnail 
+                    tbody
+                        each products
+                        tr 
+                            td #{this.id}
+                            td #{this.name}
+                            td #{this.price}
+                            td #{this.thumbnail}
